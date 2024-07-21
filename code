@@ -1,0 +1,121 @@
+#include <LiquidCrystal.h>
+#include <stdio.h>
+
+LiquidCrystal lcd(6, 7, 5, 4, 3, 2);
+
+
+int co        = 10;
+int ign       = 8;
+int motor     = 9;
+
+int buzzer    = 13;
+
+
+int tempc=0;
+
+int hbtc=0,hbtc1=0,rtrl=0,rtr2=0;
+int temps=0,hums=0,alcs=0,eyes=0,buttons=0;
+ 
+ unsigned char rcv,count,gchr='x',gchr1='x',robos='s';
+ 
+ char rcvmsg[10],pastnumber[11];
+ 
+ char gpsval[50];
+// char dataread[100] = "";
+// char lt[15],ln[15];
+
+
+int i=0,k=0,lop=0;
+int  gps_status=0;
+float latitude=0; 
+float logitude=0;                       
+String Speed="";
+String gpsString="";
+char *test="$GPRMC";
+
+
+//int hbtc=0,hbtc1=0,rtrl=0;
+
+unsigned char gv=0,msg1[10],msg2[11];
+ float lati=0,longi=0;
+unsigned int lati1=0,longi1=0;
+unsigned char flat[5],flong[5];
+unsigned char finallat[8],finallong[9];
+
+
+ int ii=0,rchkr=0;
+ 
+
+
+String inputString = "";         // a string to hold incoming data
+boolean stringComplete = false;  // whether the string is complete
+
+
+void okcheck()
+{
+  unsigned char rcr;
+  do{
+      rcr = Serial.read();
+    }while(rcr == 'K');
+}
+
+
+
+
+ void sound()
+ {
+  digitalWrite(buzzer,LOW);delay(1500);digitalWrite(buzzer,HIGH);
+ }
+ 
+void setup() 
+{
+ Serial.begin(9600);//serialEvent();
+  
+  digitalWrite(motor, LOW);digitalWrite(buzzer, HIGH);
+  
+  lcd.begin(16, 2);lcd.cursor();
+  lcd.print("Automated Control");
+  lcd.setCursor(0,1);
+  lcd.print(" Air Pollution");
+    delay(1500);
+ 
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("CO:");    //3,0
+}
+
+
+void loop() 
+{
+  if(digitalRead(co) == LOW)
+    {
+       lcd.setCursor(3,0);lcd.print("ON  ");
+             digitalWrite(buzzer, LOW);
+
+    }
+  if(digitalRead(co) == HIGH)
+    {
+       lcd.setCursor(3,0);lcd.print("OFF ");
+             digitalWrite(buzzer, HIGH);
+    }
+
+  if(digitalRead(ign) == LOW)
+    {
+       lcd.setCursor(0,1);lcd.print("Ign ON  ");
+    }
+  if(digitalRead(ign) == HIGH)
+    {
+       lcd.setCursor(0,1);lcd.print("Ign OFF ");
+    }  
+
+  if(digitalRead(ign) == LOW && digitalRead(co) == HIGH)
+    {
+      digitalWrite(motor, HIGH);
+    }
+  else
+    {
+      digitalWrite(motor, LOW);
+    }
+   
+  delay(100);   
+}
